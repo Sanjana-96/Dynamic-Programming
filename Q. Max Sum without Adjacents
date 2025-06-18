@@ -1,0 +1,72 @@
+Q. Max Sum without Adjacents
+
+<!--Given an array arr containing positive integers. Find the maximum sum of any possible subsequence such that no two numbers in the subsequence should be adjacent in array arr.
+
+Examples:
+
+Input: arr[] = [5, 5, 10, 100, 10, 5]
+Output: 110
+Explanation: If you take indices 0, 3 and 5, then = 5+100+5 = 110.
+Input: arr[] = [3, 2, 7, 10]
+Output: 13
+Explanation: 3 and 10 forms a non continuous subsequence with maximum sum.
+Input: arr[] = [9, 1, 6, 10]
+Output: 19
+Explanation: 9 and 10 forms a non continuous subsequence with maximum sum.
+Constraints:
+1 ≤ arr.size() ≤ 105
+1 ≤ arri ≤ 105-->
+
+
+**Memoization Approach**
+
+#User function template for C++
+class Solution {
+ private:
+    int function(int index,vector<int>& arr,vector<int>& dp)
+    {
+        if(index==0) return arr[index];
+        if(index<0) return 0;
+        
+       // check for overlapping subproblem
+        if(dp[index]!=-1) return dp[index];
+      
+        int pick=arr[index]+ function(index-2,arr,dp);
+        int notpick= 0+ function(index-1,arr,dp);
+        
+        return  dp[index]= max(pick,notpick);
+    }
+ 
+  public:
+    // calculate the maximum sum with out adjacent
+    int findMaxSum(vector<int>& arr) {
+        // code here
+        int n=arr.size();
+        vector<int> dp(n+1,-1);
+        int res=function(n-1,arr,dp);
+        return res;
+    }
+};
+
+
+
+** Tabulation Approach with space optimization**
+
+    // calculate the maximum sum with out adjacent
+    int findMaxSum(vector<int>& arr) {
+   
+        int n=arr.size();
+        int prev=arr[0];
+        int prev1=0;
+        
+        for(int i=1;i<n;i++){
+            int take= arr[i];
+            if(i>1) take+=prev1;
+            int nontake=0+prev;         
+            int curi=  max(take,nontake);
+            prev1=prev;
+            prev=curi;
+        }
+        return prev;
+        
+    }

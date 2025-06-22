@@ -1,0 +1,52 @@
+
+Given an integer array nums, return true if you can partition the array into two subsets such that the sum of the elements in both subsets is equal or false otherwise.
+
+Example 1:
+
+Input: nums = [1,5,11,5]
+Output: true
+Explanation: The array can be partitioned as [1, 5, 5] and [11].
+Example 2:
+
+Input: nums = [1,2,3,5]
+Output: false
+Explanation: The array cannot be partitioned into equal sum subsets.
+ 
+
+Constraints:
+
+1 <= nums.length <= 200
+1 <= nums[i] <= 100
+
+class Solution {
+
+    bool fun(int n,int k,vector<int>& nums){
+          vector<bool> prev(k+1,0),cur(k+1,0);
+       prev[0]=cur[0]=true;
+       prev[nums[0]]=true;
+      
+      for(int i=0;i<n;i++){
+        for(int t=1;t<=k;t++){
+            bool notTake=prev[t];
+            bool take=false;
+            if(nums[i]<=t) take=prev[t-nums[i]];
+            cur[t]=take | notTake;
+        }
+        prev=cur;
+                 }
+                 return prev[k];
+    }
+public:
+    bool canPartition(vector<int>& nums) {
+     int n=nums.size();
+     int toSum=0;
+     for(int i=0;i<n;i++){
+        toSum+=nums[i];
+     }
+     if(toSum%2) return false;
+     int target=toSum/2;
+     return fun(n,t,nums);
+
+
+    }
+};

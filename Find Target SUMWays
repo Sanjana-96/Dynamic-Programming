@@ -1,0 +1,32 @@
+class Solution {
+
+    int f1(vector<int>& a,int tar){
+        int n=a.size();
+        vector<int>prev(tar+1,0);
+         vector<int>cur(tar+1,0);
+        if(a[0]==0) prev[0]=2;
+        else prev[0]=1;
+        if(a[0]!=0 && a[0]<=tar) prev[a[0]]=1;
+        for(int i=0;i<n;i++){
+            for(int t=0;t<=tar;t++){
+                int nt=prev[t];
+                int tk=0;
+                if(a[i]<=t) tk=prev[t-a[i]];
+                cur[t]=nt+tk;
+            }
+            prev=cur;
+        }
+        return prev[tar];
+    }
+
+    int f2(vector<int>& a,int d,int n){
+        int sum=0;
+        for(auto it:a) sum+=it;
+        if(sum-d<=0 || (sum-d)%2) return false;
+        return f1(a,(sum-d)/2);
+    }
+public:
+    int findTargetSumWays(vector<int>& nums, int target) {
+        return f2(nums,target,nums.size());
+    }
+};
